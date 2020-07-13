@@ -1,0 +1,53 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class Scuare : MonoBehaviour
+{
+    public GameObject targetObject;
+    public int level;//行列数
+
+
+    public void SetLevel(int setLevel)
+    {
+        level = setLevel;
+    }
+
+    public void MakeScuare()
+    {
+        Destroy();
+         
+        float max=8.5f;//最大位置
+        float min=-8.5f;//原点
+        float dis=max-min;//幅
+
+        GameObject Canvas = GameObject.Find("CanvasPlay");
+        
+        for (int i = 0; i < level; i++)//最初は動かないので0から始める
+        {
+            for (int j = 0; j < level; j++)
+            {
+                float x = min + dis * i / (level-1) ;
+                float z = min + dis * j / (level-1) ;
+                Vector3 pos = new Vector3(x, 0.5f, z);
+                GameObject prefab = Instantiate(targetObject, pos, Quaternion.Euler(0, 0, 90), transform);
+
+                //カウント
+                Canvas.GetComponent<UIDisp>().CountInc();
+            }
+        }
+    }
+
+    public void Destroy()
+    {
+        GameObject[] coins = GameObject.FindGameObjectsWithTag("Pick Up");
+        foreach (GameObject coin in coins)
+        {
+            // 消す！
+            Destroy(coin);
+        }
+        GameObject Canvas = GameObject.Find("CanvasPlay");
+        Canvas.GetComponent<UIDisp>().CountReset();
+    }
+}
